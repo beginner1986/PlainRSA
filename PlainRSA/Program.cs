@@ -6,7 +6,13 @@ namespace PlainRSA
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            RSA rsa = new RSA(2048);
+            Key publicKey = rsa.GetPublicKey();
+            string plainText = "Wiadomość do zaszyfrowania";
+            byte[] encrypted = rsa.Encrypt(plainText, publicKey);
+            string decrypted = rsa.Decrypt(encrypted);
+
+            Console.ReadKey(treu);
         }
     }
 }
