@@ -24,32 +24,15 @@ namespace PlainRSA
             p = BigInteger.ProbablePrime(security, new SecureRandom());
             q = BigInteger.ProbablePrime(security, new SecureRandom());
 
-            // DEBUG
-            Console.WriteLine("Random numbers generated");
-
             // the modulus
             m = p.Multiply(q);
             
-            // DEBUG
-            Console.WriteLine("Modulus generated");
-
             // fi(m) - coprimes numbr
             fi = p.Subtract(BigInteger.One).Multiply(q.Subtract(BigInteger.One));
 
-            // DEBUG
-            Console.WriteLine("Fi value generated");
-
             // generate the keys
             publicKey = GeneratePublicKey();
-            privateKey = GeneratePrivateKey();
-
-            // perform ed test
-            Console.Write("Test e*d == 1: ");
-            BigInteger test = publicKey.GetValue().Multiply(privateKey.GetValue()).Mod(fi);
-            if (test.CompareTo(BigInteger.One) == 0)
-                Console.Write("OK");
-            else
-                Console.Write("FAILED");
+            privateKey = GeneratePrivateKey(security);
         }
 
         /*
@@ -65,24 +48,32 @@ namespace PlainRSA
         }
         */
 
-        private Key GeneratePrivateKey()
+        //don't charge me, it's only for this task purposes ;)
+        //private key is unavailable outside the RSA class, so this method
+        //is necessary to prove that everything works correctly
+        public void ShowMySecrets()
         {
-            BigInteger d = new BigInteger(m.BitLength, new SecureRandom());
+            Console.WriteLine("Bezpieczeństwo: {0} bitów", security);
+            Console.WriteLine("Klucz publiczny:");
+            Console.WriteLine(publicKey.GetValue().ToString());
+            Console.WriteLine("Klucz prywatny:");
+            Console.WriteLine(privateKey.GetValue().ToString());
 
-            // temp = e * d (mod m)
-            BigInteger temp = d.Multiply(publicKey.GetValue()).Mod(fi);
+            // perform ed test
+            Console.Write("Test e*d == 1: ");
+            BigInteger test = publicKey.GetValue().Multiply(privateKey.GetValue()).Mod(fi);
+            if (test.CompareTo(BigInteger.One) == 0)
+                Console.Write("OK");
+            else
+                Console.Write("FAILED");
+        }
 
-            // if(temp != 1)
-            if(temp.CompareTo(BigInteger.One) != 0)
-            {
-                d = d.Add(temp.Subtract(BigInteger.One));
-            }
+        private Key GeneratePrivateKey(int security)
+        {
+            BigInteger e = publicKey.GetValue();
+            BigInteger d = e.ModInverse(fi);
 
             Key result = new Key(d, m);
-
-            // DEBUG
-            Console.Write("Private key generated: ");
-            Console.WriteLine(d.ToString());
 
             return result;
         }
@@ -92,10 +83,6 @@ namespace PlainRSA
             BigInteger e = GetCoprime(publicKeyLength, fi);
 
             Key result = new Key(e, m);
-
-            // DEBUG
-            Console.Write("Public key generated: ");
-            Console.WriteLine(e.ToString());
 
             return result;
         }
