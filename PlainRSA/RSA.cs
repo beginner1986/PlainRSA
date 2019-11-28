@@ -102,12 +102,12 @@ namespace PlainRSA
         
         private BigInteger GetCoprime(int bitlength, BigInteger number)
         {
-            BigInteger result = new BigInteger(bitlength, new SecureRandom());
+            BigInteger result;
 
             do
             {
                 result = new BigInteger(bitlength, new SecureRandom());
-            } while (number.Gcd(result).CompareTo(BigInteger.One) == 0);
+            } while (number.Gcd(result).CompareTo(BigInteger.One) != 0);
 
             return result;
         }
