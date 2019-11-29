@@ -36,7 +36,7 @@ namespace PlainRSA
 
             // generate the keys - mublic key must be first
             publicKey = GeneratePublicKey();
-            privateKey = GeneratePrivateKey(security);
+            privateKey = GeneratePrivateKey();
         }
 
         public byte[] Encrypt(string plainText, Key publicKey)
@@ -46,7 +46,7 @@ namespace PlainRSA
             // use it as parameter of BigInteger constructor
             BigInteger result = new BigInteger(bytes);
             
-            // m^e (mod m) - calculated on all the plain text and converted to bytes array
+            // M^e (mod m) - calculated on all the plain text and converted to bytes array
             return result.ModPow(publicKey.GetValue(), publicKey.GetModulus()).ToByteArray();
         }
 
@@ -54,14 +54,13 @@ namespace PlainRSA
         {
             // create new BigInteger containing encrypted text bytes
             BigInteger result = new BigInteger(encrypted);
-            // m^d (mod m) - calculated on all the encrypted text  
+            // M^d (mod m) - calculated on all the encrypted text  
             result = result.ModPow(privateKey.GetValue(), privateKey.GetModulus());
 
             // convert BigInteger result to bytes array and return it converted to string
             return Encoding.UTF8.GetString(result.ToByteArray());
         }
 
-        
         //don't charge me, it's only for this task purposes ;)
         //private key is unavailable outside the RSA class, so this method
         //is necessary to prove that everything works correctly
@@ -84,7 +83,7 @@ namespace PlainRSA
                 Console.Write("FAILED");
         }
 
-        private Key GeneratePrivateKey(int security)
+        private Key GeneratePrivateKey()
         {
             BigInteger e = publicKey.GetValue();
             BigInteger d = e.ModInverse(fi);
