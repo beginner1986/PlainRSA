@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using System.Diagnostics;
 
 namespace PlainRSA
 {
@@ -27,12 +28,21 @@ namespace PlainRSA
             Console.WriteLine(BitConverter.ToString(Encoding.UTF8.GetBytes(plainText)).Replace("-", ""));
 
             // encryption
+            Stopwatch timer = new Stopwatch();
+            timer.Start();
             byte[] encrypted = rsa.Encrypt(plainText, publicKey);
+            timer.Stop();
+            TimeSpan encryptionTime = timer.Elapsed;
+            timer.Reset();
+
             Console.WriteLine("Podpis: ");
             Console.WriteLine(BitConverter.ToString(encrypted).Replace("-", ""));
 
             // decryption
+            timer.Start();
             string decrypted = rsa.Decrypt(encrypted);
+            timer.Stop();
+            TimeSpan decryptionTime = timer.Elapsed;
             //Console.WriteLine("Wiadomość odszyfrowana: ");
             //Console.WriteLine(decrypted);
 
@@ -42,6 +52,11 @@ namespace PlainRSA
                 Console.WriteLine("podpis się zgadza");
             else
                 Console.WriteLine("podpis niezgodny");
+            Console.WriteLine();
+
+            // time measurement presentation
+            Console.WriteLine("Czas podpisywania: {0}", encryptionTime);
+            Console.WriteLine("Czas weryfikacji podpisu: {0}", decryptionTime);
 
             // hold the screen
             Console.ReadKey(true);

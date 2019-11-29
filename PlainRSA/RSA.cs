@@ -17,7 +17,7 @@ namespace PlainRSA
         private readonly BigInteger m;      // m = p * q, modulus, common for all the keys
         private readonly BigInteger fi;     // fi = (p - 1) 8 (q - 1)
 
-        private const int publicKeyLength = 16;     // as fixed value
+        private const int publicKeyLength = 32;     // as fixed value
 
         // the 
         public RSA(int security)
