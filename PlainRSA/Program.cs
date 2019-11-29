@@ -33,8 +33,15 @@ namespace PlainRSA
 
             // decryption
             string decrypted = rsa.Decrypt(encrypted);
-            Console.WriteLine("Wiadomość odszyfrowana: ");
-            Console.WriteLine(decrypted);
+            //Console.WriteLine("Wiadomość odszyfrowana: ");
+            //Console.WriteLine(decrypted);
+
+            // signature verification
+            Console.Write("Weryfikacja: ");
+            if (plainText.Equals(decrypted))
+                Console.WriteLine("podpis się zgadza");
+            else
+                Console.WriteLine("podpis niezgodny");
 
             // hold the screen
             Console.ReadKey(true);

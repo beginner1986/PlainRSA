@@ -14,7 +14,7 @@ namespace PlainRSA
         private readonly Key privateKey;
         private readonly BigInteger p;      // the first big prime number
         private readonly BigInteger q;      // the second big prime number
-        private readonly BigInteger m;      // modulus, common for all the keys
+        private readonly BigInteger m;      // m = p * q, modulus, common for all the keys
         private readonly BigInteger fi;     // fi = (p - 1) 8 (q - 1)
 
         private const int publicKeyLength = 16;     // as fixed value
@@ -34,7 +34,7 @@ namespace PlainRSA
             // fi(m) - coprimes numbr
             fi = p.Subtract(BigInteger.One).Multiply(q.Subtract(BigInteger.One));
 
-            // generate the keys - mublic key must be first
+            // generate the keys - public key must be first
             publicKey = GeneratePublicKey();
             privateKey = GeneratePrivateKey();
         }
