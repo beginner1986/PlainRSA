@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using System.Threading.Tasks;
 using Org.BouncyCastle.Math;
 using Org.BouncyCastle.Security;
 
@@ -12,25 +13,40 @@ namespace PlainRSA
         private readonly int security;      // security level, given as parameter
         private readonly Key publicKey;
         private readonly Key privateKey;
-        private readonly BigInteger p;      // the first big prime number
-        private readonly BigInteger q;      // the second big prime number
+        private BigInteger p;               // the first big prime number
+        private BigInteger q;               // the second big prime number
         private readonly BigInteger m;      // m = p * q, modulus, common for all the keys
         private readonly BigInteger fi;     // fi = (p - 1) 8 (q - 1)
 
-        private const int publicKeyLength = 32;     // as fixed value
+        private const int publicKeyLength = 16;     // as fixed value
 
         // the 
         public RSA(int security)
         {
             this.security = security;
-
+            
             // generate base primes
-            p = BigInteger.ProbablePrime(security, new SecureRandom());
-            q = BigInteger.ProbablePrime(security, new SecureRandom());
+            Task generateP = new Task(() =>
+            {
+                Console.WriteLine("Generating p...");
+                p = BigInteger.ProbablePrime(security, new SecureRandom());
+                Console.WriteLine("p generated.");
+            });
+
+            Task generateQ = new Task(() =>
+            {
+                Console.WriteLine("Generating q...");
+                q = BigInteger.ProbablePrime(security, new SecureRandom());
+                Console.WriteLine("q generated.");
+            });
+            
+            generateP.Start();
+            generateQ.Start();
+            Task.WaitAll(generateP, generateQ);
 
             // the modulus
             m = p.Multiply(q);
-            
+
             // fi(m) - coprimes numbr
             fi = p.Subtract(BigInteger.One).Multiply(q.Subtract(BigInteger.One));
 
@@ -105,6 +121,16 @@ namespace PlainRSA
         private BigInteger GetCoprime(int bitlength, BigInteger number)
         {
             // two numbers are coprime if their GCD is 1
+            BigInteger result = new BigInteger(bitlength, new Random());
+
+            while(number.Gcd(result).CompareTo(BigInteger.One) != 0)
+            {
+                result = result.Add(BigInteger.One);
+
+                Console.WriteLine(result.ToString());
+            }
+
+            /*
             BigInteger result;
 
             // so take random numbers, untill condition will be fulfilled.
@@ -112,7 +138,7 @@ namespace PlainRSA
             {
                 result = new BigInteger(bitlength, new SecureRandom());
             } while (number.Gcd(result).CompareTo(BigInteger.One) != 0);
-
+            */
             return result;
         }
 
