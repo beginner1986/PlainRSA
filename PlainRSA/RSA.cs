@@ -24,23 +24,17 @@ namespace PlainRSA
         {
             this.security = security;
             
-            // generate base primes
+            // generate base primes p and q
             Task generateP = new Task(() =>
-            {
-                Console.WriteLine("Generating p...");
-                p = BigInteger.ProbablePrime(security / 2, new SecureRandom());
-                Console.WriteLine("p generated.");
-            });
+                { p = BigInteger.ProbablePrime(security / 2, new SecureRandom()); });
 
             Task generateQ = new Task(() =>
-            {
-                Console.WriteLine("Generating q...");
-                q = BigInteger.ProbablePrime(security / 2, new SecureRandom());
-                Console.WriteLine("q generated.");
-            });
+                { q = BigInteger.ProbablePrime(security / 2, new SecureRandom()); });
             
+            // do it parallel
             generateP.Start();
             generateQ.Start();
+            // continue only when both tasks are done
             Task.WaitAll(generateP, generateQ);
 
             // the modulus
@@ -120,24 +114,17 @@ namespace PlainRSA
         private BigInteger GetCoprime(int bitlength, BigInteger number)
         {
             // two numbers are coprime if their GCD is 1
-            BigInteger result = new BigInteger(bitlength, new Random());
 
+            //get random BigInteger
+            BigInteger result = new BigInteger(bitlength, new SecureRandom());
+
+            // if it is coprime with given number break
             while(number.Gcd(result).CompareTo(BigInteger.One) != 0)
             {
+                // if it is not coprime then increment
                 result = result.Add(BigInteger.One);
-
-                Console.WriteLine(result.ToString());
             }
 
-            /*
-            BigInteger result;
-
-            // so take random numbers, untill condition will be fulfilled.
-            do
-            {
-                result = new BigInteger(bitlength, new SecureRandom());
-            } while (number.Gcd(result).CompareTo(BigInteger.One) != 0);
-            */
             return result;
         }
 
