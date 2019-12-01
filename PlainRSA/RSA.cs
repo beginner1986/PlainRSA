@@ -20,7 +20,6 @@ namespace PlainRSA
 
         private const int publicKeyLength = 16;     // as fixed value
 
-        // the 
         public RSA(int security)
         {
             this.security = security;
@@ -29,14 +28,14 @@ namespace PlainRSA
             Task generateP = new Task(() =>
             {
                 Console.WriteLine("Generating p...");
-                p = BigInteger.ProbablePrime(security, new SecureRandom());
+                p = BigInteger.ProbablePrime(security / 2, new SecureRandom());
                 Console.WriteLine("p generated.");
             });
 
             Task generateQ = new Task(() =>
             {
                 Console.WriteLine("Generating q...");
-                q = BigInteger.ProbablePrime(security, new SecureRandom());
+                q = BigInteger.ProbablePrime(security / 2, new SecureRandom());
                 Console.WriteLine("q generated.");
             });
             

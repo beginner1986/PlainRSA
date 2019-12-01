@@ -13,7 +13,7 @@ namespace PlainRSA
             Console.WriteLine("Adam Emieljaniuk - N2C\n");
 
             // RSA encryptor / decryptor class
-            RSA rsa = new RSA(2048);
+            RSA rsa = new RSA(4096);
 
             // print the hidden cipher data, unavailable outside the RSA class
             rsa.ShowMySecrets();
