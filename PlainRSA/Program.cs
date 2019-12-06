@@ -6,6 +6,7 @@ namespace PlainRSA
 {
     class Program
     {
+        /*
         static void Main(string[] args)
         {
             // introduction
@@ -61,5 +62,6 @@ namespace PlainRSA
             // hold the screen
             Console.ReadKey(true);
         }
+        */
     }
 }
