@@ -54,7 +54,7 @@ namespace PlainRSA
             // time measurement presentation
             Console.WriteLine("Czas podpisywania: {0}", encryptionTime);
             Console.WriteLine("Czas weryfikacji podpisu: {0}", decryptionTime);
-
+            
             // experiment 1
             Console.WriteLine("----------------------------------------------------\n");
             Experiment1 experiment1 = new Experiment1();
@@ -64,6 +64,11 @@ namespace PlainRSA
             Console.WriteLine("----------------------------------------------------\n");
             Experiment2 experiment2 = new Experiment2();
             experiment2.Start();
+
+            // experiment 3
+            Console.WriteLine("----------------------------------------------------\n");
+            Experiment3 experiment3 = new Experiment3();
+            experiment3.Start();
 
             // hold the screen
             Console.ReadKey(true);

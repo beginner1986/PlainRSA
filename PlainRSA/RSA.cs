@@ -57,10 +57,7 @@ namespace PlainRSA
         public BigInteger Decrypt(BigInteger encrypted)
         {
             // M^d (mod m) - calculated on all the encrypted text  
-            encrypted = encrypted.ModPow(privateKey.GetValue(), privateKey.GetModulus());
-
-            // convert BigInteger result to bytes array and return it converted to string
-            return encrypted;
+            return encrypted.ModPow(privateKey.GetValue(), privateKey.GetModulus());
         }
 
         //don't charge me, it's only for this task purposes ;)
