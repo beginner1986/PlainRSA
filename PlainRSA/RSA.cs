@@ -48,26 +48,19 @@ namespace PlainRSA
             privateKey = GeneratePrivateKey();
         }
 
-        public byte[] Encrypt(string plainText, Key publicKey)
+        public BigInteger Encrypt(BigInteger plain, Key publicKey)
         {
-            // convert plain text to bytes array
-            byte[] bytes = Encoding.UTF8.GetBytes(plainText);
-            // use it as parameter of BigInteger constructor
-            BigInteger result = new BigInteger(bytes);
-            
             // M^e (mod m) - calculated on all the plain text and converted to bytes array
-            return result.ModPow(publicKey.GetValue(), publicKey.GetModulus()).ToByteArray();
+            return plain.ModPow(publicKey.GetValue(), publicKey.GetModulus());
         }
 
-        public string Decrypt(byte[] encrypted)
+        public BigInteger Decrypt(BigInteger encrypted)
         {
-            // create new BigInteger containing encrypted text bytes
-            BigInteger result = new BigInteger(encrypted);
             // M^d (mod m) - calculated on all the encrypted text  
-            result = result.ModPow(privateKey.GetValue(), privateKey.GetModulus());
+            encrypted = encrypted.ModPow(privateKey.GetValue(), privateKey.GetModulus());
 
             // convert BigInteger result to bytes array and return it converted to string
-            return Encoding.UTF8.GetString(result.ToByteArray());
+            return encrypted;
         }
 
         //don't charge me, it's only for this task purposes ;)

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Text;
 using System.Diagnostics;
+using Org.BouncyCastle.Math;
 
 namespace PlainRSA
 {
     class Program
     {
-        /*
         static void Main(string[] args)
         {
             // introduction
@@ -21,31 +21,27 @@ namespace PlainRSA
 
             // get the plain text
             Key publicKey = rsa.GetPublicKey();
-            string plainText = "Za oknem pada deszcz..";
+            BigInteger plainText = new BigInteger(Encoding.UTF8.GetBytes("Za oknem pada deszcz.."));
             Console.WriteLine("\n");
             Console.WriteLine("Wiadomość: ");
-            Console.WriteLine(plainText);
-            Console.WriteLine("Wiadomość w bajtach: ");
-            Console.WriteLine(BitConverter.ToString(Encoding.UTF8.GetBytes(plainText)).Replace("-", ""));
+            Console.WriteLine(Encoding.UTF8.GetString(plainText.ToByteArray()));
 
             // encryption
             Stopwatch timer = new Stopwatch();
             timer.Start();
-            byte[] encrypted = rsa.Encrypt(plainText, publicKey);
+            BigInteger encrypted = rsa.Encrypt(plainText, publicKey);
             timer.Stop();
             TimeSpan encryptionTime = timer.Elapsed;
             timer.Reset();
 
             Console.WriteLine("Podpis: ");
-            Console.WriteLine(BitConverter.ToString(encrypted).Replace("-", ""));
+            Console.WriteLine(encrypted.ToString());
 
             // decryption
             timer.Start();
-            string decrypted = rsa.Decrypt(encrypted);
+            BigInteger decrypted = rsa.Decrypt(encrypted);
             timer.Stop();
             TimeSpan decryptionTime = timer.Elapsed;
-            //Console.WriteLine("Wiadomość odszyfrowana: ");
-            //Console.WriteLine(decrypted);
 
             // signature verification
             Console.Write("Weryfikacja: ");
@@ -59,9 +55,18 @@ namespace PlainRSA
             Console.WriteLine("Czas podpisywania: {0}", encryptionTime);
             Console.WriteLine("Czas weryfikacji podpisu: {0}", decryptionTime);
 
+            // experiment 1
+            Console.WriteLine("----------------------------------------------------\n");
+            Experiment1 experiment1 = new Experiment1();
+            experiment1.Start();
+
+            // experiment 2
+            Console.WriteLine("----------------------------------------------------\n");
+            Experiment2 experiment2 = new Experiment2();
+            experiment2.Start();
+
             // hold the screen
             Console.ReadKey(true);
         }
-        */
     }
 }
